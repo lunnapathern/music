@@ -15,7 +15,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.content.startswith('z!entrar'):
+    if message.content.startswith('ls!entrar'):
         try:
             channel = message.author.voice.voice_channel
             await client.join_voice_channel(channel)
@@ -30,7 +30,7 @@ async def on_message(message):
             embed2.timestamp = datetime.datetime.utcnow()
             await client.send_message(message.channel,embed=embed2)
 
-    if message.content.startswith('z!sair'):
+    if message.content.startswith('ls!sair'):
         try:
             mscleave = discord.Embed(title="\n",color=color,description="Hey senhor (a) sai do canal de voz e a música parou!")
             mscleave.set_footer(text=message.server.name, icon_url=message.server.icon_url)
@@ -49,7 +49,7 @@ async def on_message(message):
             embed3.timestamp = datetime.datetime.utcnow()
             await client.send_message(message.channel,embed=embed3)
 
-    if message.content.startswith('z!tocar'):
+    if message.content.startswith('ls!tocar'):
         try:
             yt_url = message.content[6:]
             if client.is_voice_connected(message.server):
@@ -99,7 +99,7 @@ async def on_message(message):
 
 
 
-    if message.content.startswith('z!pausa'):
+    if message.content.startswith('ls!pausa'):
         try:
             mscpause = discord.Embed(title="\n",color=color,description="\n\n\n```Música pausada com sucesso!```")
             mscpause.set_thumbnail(url="https://cdn.discordapp.com/emojis/485124116576337943.png?v=1")
@@ -109,7 +109,7 @@ async def on_message(message):
             players[message.server.id].pause()
         except Exception as error:
             await client.send_message(message.channel, "Error: [{error}]".format(error=error))
-    if message.content.startswith('z!resume'):
+    if message.content.startswith('ls!resume'):
         try:
             mscresume = discord.Embed(title="\n",color=color,description="\n\n\n```Música retornou a tocar com sucesso senhor (a)!```" )
             mscresume.set_thumbnail(url="https://cdn.discordapp.com/emojis/485124116576337943.png?v=1")
