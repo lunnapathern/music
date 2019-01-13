@@ -1,3 +1,5 @@
 discord.py
 safygiphy
 youtube_dl
+opus
+ffmpeg
