@@ -1,8 +1,6 @@
 import discord
-import random
 import youtube_dl
 import datetime
-import os
 client = discord.Client()
 
 players = {}
@@ -42,7 +40,7 @@ async def on_message(message):
             mscleave1 = discord.Embed(title="\n",color=color,description="Hey senhor (a) não estou em nenhum canal de voz.")
             mscleave1.set_footer(text=message.server.name, icon_url=message.server.icon_url)
             mscleave1.timestamp = datetime.datetime.utcnow()
-            await client.send_message(message.channel,ebemd=mscleavel1)
+            await client.send_message(message.channel,embed=mscleavel1)
         except Exception as Hugo:
             embed3 = discord.Embed(color=color,description="Ein Error: ``{haus}``".format(haus=Hugo))
             embed3.set_footer(text=message.server.name, icon_url=message.server.icon_url)
@@ -70,7 +68,8 @@ async def on_message(message):
                     mscemb.set_footer(text=message.server.name, icon_url=message.server.icon_url)
                     mscemb.timestamp = datetime.datetime.utcnow()
                     await client.send_message(message.channel, embed=mscemb)
-
+                except Exception:
+                    await client.send_message(message.server, "Error: [{error}]".format(error=e))
 
             if not client.is_voice_connected(message.server):
                 try:
@@ -90,7 +89,10 @@ async def on_message(message):
                     mscemb2.set_footer(text=message.server.name, icon_url=message.server.icon_url)
                     mscemb2.timestamp = datetime.datetime.utcnow()
                     await client.send_message(message.channel, embed=mscemb2)
-
+                except SyntaxError:
+                    await client.send_message(message.channel, "Error: [{error}]".format(error=error))
+        except Exception as e:
+            await client.send_message(message.channel, "Error: [{error}]".format(error=e))
 
 
 
@@ -113,6 +115,7 @@ async def on_message(message):
             players[message.server.id].resume()
         except Exception as error:
             await client.send_message(message.channel, "Error: [{error}]".format(error=error))
+
 
 
 
