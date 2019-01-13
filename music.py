@@ -70,8 +70,7 @@ async def on_message(message):
                     mscemb.set_footer(text=message.server.name, icon_url=message.server.icon_url)
                     mscemb.timestamp = datetime.datetime.utcnow()
                     await client.send_message(message.channel, embed=mscemb)
-                except Exception:
-                    await client.send_message(message.server, "Error: [{error}]".format(error=e))
+
 
             if not client.is_voice_connected(message.server):
                 try:
@@ -91,18 +90,14 @@ async def on_message(message):
                     mscemb2.set_footer(text=message.server.name, icon_url=message.server.icon_url)
                     mscemb2.timestamp = datetime.datetime.utcnow()
                     await client.send_message(message.channel, embed=mscemb2)
-                except Exception:
-                    await client.send_message(message.channel, "Error: [{error}]".format(error=error))
-        except Exception as e:
-            await client.send_message(message.channel, "Error: [{error}]".format(error=e))
+
 
 
 
 
     if message.content.startswith('ls!pausa'):
         try:
-            mscpause = discord.Embed(title="\n",color=color,description="\n\n\n```Música pausada com sucesso!```")
-            mscpause.set_thumbnail(url="https://cdn.discordapp.com/emojis/485124116576337943.png?v=1")
+            mscpause = discord.Embed(title="\n",color=color,description="Música pausada com sucesso!")
             mscpause.set_footer(text=message.server.name, icon_url=message.server.icon_url)
             mscpause.timestamp = datetime.datetime.utcnow()
             await client.send_message(message.channel, embed=mscpause)
@@ -111,8 +106,7 @@ async def on_message(message):
             await client.send_message(message.channel, "Error: [{error}]".format(error=error))
     if message.content.startswith('ls!resume'):
         try:
-            mscresume = discord.Embed(title="\n",color=color,description="\n\n\n```Música retornou a tocar com sucesso senhor (a)!```" )
-            mscresume.set_thumbnail(url="https://cdn.discordapp.com/emojis/485124116576337943.png?v=1")
+            mscresume = discord.Embed(title="\n",color=color,description="Música retornou a tocar com sucesso senhor (a)!" )
             mscresume.set_footer(text=message.server.name, icon_url=message.server.icon_url)
             mscresume.timestamp = datetime.datetime.utcnow()
             await client.send_message(message.channel, embed=mscresume)
