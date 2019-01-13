@@ -8,7 +8,7 @@ import datetime
 color = 0x0cb4f1
 
 if not discord.opus.is_loaded():
-    discord.opus.load_opus('opus')
+
 
 class VoiceEntry:
     def __init__(self, message, player):
