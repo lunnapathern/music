@@ -2,4 +2,4 @@ discord.py
 safygiphy
 discord.py[voice]
 youtube_dl
-
+PyNaCl
