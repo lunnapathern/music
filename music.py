@@ -1,6 +1,8 @@
 import discord
 import youtube_dl
 import datetime
+import os
+
 client = discord.Client()
 
 players = {}
