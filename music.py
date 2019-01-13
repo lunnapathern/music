@@ -6,6 +6,7 @@ import time
 import datetime
 import safygiphy
 import youtube_dl
+import os
 
 color = discord.Color(random.randint(0xe081e4, 0xe081e4))
 
