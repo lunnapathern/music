@@ -1,14 +1,11 @@
 import asyncio
 import discord
 from discord.ext import commands
-import random
-import time
 import datetime
-import safygiphy
-import youtube_dl
-import os
+#CRIADO POR ZERO
+#CODE FULL COGS MÚSICA
 
-color = discord.Color(random.randint(0xe081e4, 0xe081e4))
+color = 0x0cb4f1
 
 if not discord.opus.is_loaded():
     discord.opus.load_opus('opus')
@@ -20,10 +17,10 @@ class VoiceEntry:
         self.player = player
 
     def __str__(self):
-        fmt = '*{0.title}* enviado por {0.uploader} e solicitado por {1.display_name}'
+        fmt = '**<a:disco:495599105033109557> Música:**\n{0.title}\n**<:Online:484132926838276096> Música Solicitada Por:**\n{1.display_name}\n'
         duration = self.player.duration
         if duration:
-            fmt = fmt + ' [length: {0[0]}m {0[1]}s]'.format(divmod(duration, 60))
+            fmt = fmt + ' **<a:carregando:489775219339165703> Duração da música:**\n{0[0]} **Minutos** / {0[1]} **Segundos**'.format(divmod(duration, 60))
         return fmt.format(self.player, self.requester)
 
 class VoiceState:
@@ -59,8 +56,9 @@ class VoiceState:
         while True:
             self.play_next_song.clear()
             self.current = await self.songs.get()
-            embed1 = discord.Embed(color=color, description="***Tocando agora***\n\n" + str(self.current))
-            embed1.set_thumbnail(url="https://cdn.discordapp.com/emojis/485124116475543622.png?v=1")
+            embed1 = discord.Embed(color=color, description="**• Tocando agora:**\n\n" + str(self.current))
+            embed1.set_thumbnail(url="https://cdn.discordapp.com/attachments/510459921054040065/512242135760896012/tumblr_nkd4h5V0a91rzy0w8o1_500.gif")
+            embed1.set_footer(text="• Sona 白 🎧  ajuda? digite s!ajuda")
             embed1.timestamp = datetime.datetime.utcnow()
             await self.bot.send_message(self.current.channel,embed=embed1)
             self.current.player.start()
@@ -98,14 +96,12 @@ class Music:
         try:
             await self.create_voice_client(channel)
         except discord.ClientException:
-            embed1 = discord.Embed(color=color, description="```Já estou em um canal de voz ...")
-            embed1.set_thumbnail(url="https://cdn.discordapp.com/emojis/485124116475543622.png?v=1")
+            embed1 = discord.Embed(color=color, description="**• Já estou em um canal de voz!**")
             embed1.timestamp = datetime.datetime.utcnow()
             await self.bot.say(embed=embed1)
             await self.bot.say(embed=embed1)
         except discord.InvalidArgument:
-            embed1 = discord.Embed(color=color, description="```Este não é um canal de voz ...")
-            embed1.set_thumbnail(url="https://cdn.discordapp.com/emojis/485124116475543622.png?v=1")
+            embed1 = discord.Embed(color=color, description="**• Este não é um canal de voz!**")
             embed1.timestamp = datetime.datetime.utcnow()
             await self.bot.say(embed=embed1)
         else:
@@ -115,8 +111,7 @@ class Music:
     async def summon(self, ctx):
         summoned_channel = ctx.message.author.voice_channel
         if summoned_channel is None:
-            embed1 = discord.Embed(color=color, description="```Você não esta em um canal de voz.```")
-            embed1.set_thumbnail(url="https://cdn.discordapp.com/emojis/485124116475543622.png?v=1")
+            embed1 = discord.Embed(color=color, description="**• Você não esta em um canal de voz!**")
             embed1.timestamp = datetime.datetime.utcnow()
             await self.bot.say(embed=embed1)
             return False
@@ -145,14 +140,12 @@ class Music:
         try:
             player = await state.voice.create_ytdl_player(song, ytdl_options=opts, after=state.toggle_next)
         except Exception as e:
-            fmt = 'Ocorreu um erro ao processar esta solicitação: ```py\n{}: {}\n```'
-            await self.bot.send_message(ctx.message.channel, fmt.format(type(e).__name__, e))
+            fmt = '• Ocorreu um erro ao processar esta solicitação:{}: {}'
         else:
-            player.volume = 0.5
+            player.volume = 0.1
             entry = VoiceEntry(ctx.message, player)
-            embed1 = discord.Embed(color=color, description="***Musica adicionada na fila***\n\n" + str(entry))
-            embed1.set_thumbnail(url="https://cdn.discordapp.com/emojis/485124116475543622.png?v=1")
-            embed1.timestamp = datetime.datetime.utcnow()
+            embed1 = discord.Embed(color=color, description="**• Na Playlist**\n\n" + str(entry))
+            embed1.set_footer(text="• Sona 白 🎧 Música 24 horas / Bugs ? relate para o suporte")
             await self.bot.say(embed=embed1)
             await state.songs.put(entry)
 
@@ -162,8 +155,7 @@ class Music:
         if state.is_playing():
             player = state.player
             player.volume = value / 100
-            embed1 = discord.Embed(color=color, description="```Definir o volume para```\n\n ```{:.0%}```".format(player.volume))
-            embed1.set_thumbnail(url="https://cdn.discordapp.com/emojis/485124116475543622.png?v=1")
+            embed1 = discord.Embed(color=color, description="• Volume definido para\n\n **{:.0%}**".format(player.volume))
             embed1.timestamp = datetime.datetime.utcnow()
             await self.bot.say(embed=embed1)
 
@@ -201,36 +193,31 @@ class Music:
     async def skip(self, ctx):
         state = self.get_voice_state(ctx.message.server)
         if not state.is_playing():
-            embed1 = discord.Embed(color=color, description="```Não esta tocando música agora```")
-            embed1.set_thumbnail(url="https://cdn.discordapp.com/emojis/485124116475543622.png?v=1")
+            embed1 = discord.Embed(color=color, description="**• Não esta tocando música agora!**")
             embed1.timestamp = datetime.datetime.utcnow()
             await self.bot.say(embed=embed1)
             return
 
         voter = ctx.message.author
         if voter == state.current.requester:
-            embed1 = discord.Embed(color=color, description="```Solicitante solicitou pular música ...```")
-            embed1.set_thumbnail(url="https://cdn.discordapp.com/emojis/485124116475543622.png?v=1")
+            embed1 = discord.Embed(color=color, description="**• Usuário solicitou pular á música!**")
             embed1.timestamp = datetime.datetime.utcnow()
             await self.bot.say(embed=embed1)
             state.skip()
         elif voter.id not in state.skip_votes:
             state.skip_votes.add(voter.id)
             total_votes = len(state.skip_votes)
-            if total_votes >= 3:
-                embed1 = discord.Embed(color=color, description="```votação aprovada,pulando a música ...```")
-                embed1.set_thumbnail(url="https://cdn.discordapp.com/emojis/485124116475543622.png?v=1")
+            if total_votes >= 2:
+                embed1 = discord.Embed(color=color, description="**• Votação aprovada,pulando a música!**")
                 embed1.timestamp = datetime.datetime.utcnow()
                 await self.bot.say(embed=embed1)
                 state.skip()
             else:
-                embed1 = discord.Embed(color=color, description="```votação para pular a musica, atualmente em [{}/3]```".format(total_votes))
-                embed1.set_thumbnail(url="https://cdn.discordapp.com/emojis/485124116475543622.png?v=1")
+                embed1 = discord.Embed(color=color, description="**• Votação para pular a musica, atualmente em [{}/2]**".format(total_votes))
                 embed1.timestamp = datetime.datetime.utcnow()
                 await self.bot.say(embed=embed1)
         else:
-            embed1 = discord.Embed(color=color,description="```Você votou para pular esta música.```")
-            embed1.set_thumbnail(url="https://cdn.discordapp.com/emojis/485124116475543622.png?v=1")
+            embed1 = discord.Embed(color=color,description="**• Você votou para pular esta música!**")
             embed1.timestamp = datetime.datetime.utcnow()
             await self.bot.say(embed=embed1)
 
@@ -238,25 +225,23 @@ class Music:
     async def playing(self, ctx):
         state = self.get_voice_state(ctx.message.server)
         if state.current is None:
-            embed1 = discord.Embed(color=color,description="```Nenhuma musica esta sendo tocada.```")
-            embed1.set_thumbnail(url="https://cdn.discordapp.com/emojis/485124116475543622.png?v=1")
+            embed1 = discord.Embed(color=color,description="**• Nenhuma musica esta sendo tocada!**")
             embed1.timestamp = datetime.datetime.utcnow()
             await self.bot.say(embed=embed1)
         else:
             skip_count = len(state.skip_votes)
-            embed1 = discord.Embed(color=color,description="```Tocando agora {} [skips: {}/3]".format(state.current, skip_count))
-            embed1.set_thumbnail(url="https://cdn.discordapp.com/emojis/485124116475543622.png?v=1")
+            embed1 = discord.Embed(color=color,description="**• Tocando agoran\n {} [skips: {}/3]**".format(state.current, skip_count))
             embed1.timestamp = datetime.datetime.utcnow()
             await self.bot.say(embed=embed1)
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or('z!'), description='Comandos Music Zero Two ')
+bot = commands.Bot(command_prefix=commands.when_mentioned_or('ls!'), description='Comandos Teste')
 bot.add_cog(Music(bot))
 
 
 @bot.event
 async def on_ready():
-    print('Ready!')
-    print('Logged in as ---->', bot.user)
+    print('Música Online!')
+    print('Online Zero ---->', bot.user)
     print('ID:', bot.user.id)
 
 
