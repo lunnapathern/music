@@ -2,6 +2,7 @@ import discord
 import random
 import youtube_dl
 import datetime
+import os
 client = discord.Client()
 
 players = {}
